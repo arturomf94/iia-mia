@@ -15,15 +15,15 @@ edge(7, 15).
 goal(11).
 
 path(Start, Solution) :-
-  breadthfirst([[Start]], Solution).
+  bfs([[Start]], Solution).
 
-breadthfirst([[Node|Path]|_], [Node|Path]) :-
+bfs([[Node|Path]|_], [Node|Path]) :-
   goal(Node).
 
-breadthfirst([Path|Paths], Solution) :-
+bfs([Path|Paths], Solution) :-
   extend(Path, NewPaths),
   append(Paths, NewPaths, Paths1),
-  breadthfirst(Paths1, Solution).
+  bfs(Paths1, Solution).
 
 extend([Node|Path], NewPaths) :-
   findall([NewNode, Node|Path],
