@@ -14,7 +14,7 @@ edge(7, 14).
 edge(7, 15).
 goal(11).
 
-solve(Start, Solution) :-
+path(Start, Solution) :-
   breadthfirst([[Start]], Solution).
 
 breadthfirst([[Node|Path]|_], [Node|Path]) :-
