@@ -14,16 +14,21 @@ edge(7, 14).
 edge(7, 15).
 goal(11).
 
-bfs(Goal, [Visited|Rest], Path) :-
-    Visited = [Start|_],            
-    Start \== Goal,
-    findall(X,
-        (edge(X,Start),not(member(X,Visited))),
-        [T|Extend]),
-    maplist(consed(Visited), [T|Extend], VisitedExtended),
-    append(Rest, VisitedExtended, UpdatedQueue),
-    bfs(Goal, UpdatedQueue, Path).
+solve(Start, Solution) :-
+  breadthfirst([[Start]], Solution).
 
-bfs(Goal, [[Goal|Visited]|_], Path):- reverse([Goal|Visited], Path).
+breadthfirst([[Node|Path]|_], [Node|Path]) :-
+  goal(Node).
 
-breadth_first(Start, Goal, Path):- bfs( Goal, [[Start]], Path).
+breadthfirst([Path|Paths], Solution) :-
+  extend(Path, NewPaths),
+  append(Paths, NewPaths, Paths1),
+  breadthfirst(Paths1, Solution).
+
+extend([Node|Path], NewPaths) :-
+  findall([NewNode, Node|Path],
+          (edge(Node, NewNode),
+           not(member(NewNode,[Node|Path]))),
+          NewPaths),
+  !.
+extend(Path,[]).
