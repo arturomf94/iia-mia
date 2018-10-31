@@ -22,6 +22,7 @@ si familia_cisne yy granizado_fuerte entonces cisne_trumpetero.
 wm(orden_nariztubular).
 wm(vive_enel_mar).
 wm(pico_gancho).
+wm(es_negro).
 
 init :-
     assert(already_fired(null, false)),
@@ -38,13 +39,31 @@ exec :-
     fire(R), !.
 
 select_rule(SelectedRule) :-
-    findall(Rula, can_fire(Rule), Candidates),
+    findall(Rule, can_fire(Rule), Candidates),
     resolve(Candidates, SelectedRule).
 
 can_fire(RuleName si Condition entonces Conclusion) :-
-    RuleName si Condition entonces Conclusion,
+    RuleName si Condition entonces Conclusion, % Loop up rule in data base.
     not(already_fired(RuleName, Condition)),
     satisfied(Condition).
 
-satisfied(A yy B) :!,
-    wm(A).
+satisfied(A yy B) :- !, wm(A), satisfied(B).
+satisfied(A) :- wm(A).
+
+resolve([], []).
+resolve([X|_], X).
+
+fire(RuleName si Condition entonces Conclusion) :- !,
+    assert(already_fired(RuleName, Condition)),
+    add_to_wm(Conclusion),
+    fail.
+fire(_).
+
+add_to_wm(A yy B) :- !,
+    assert_if_not_present(A),
+    add_to_wm(B).
+
+add_to_wm(A) :- assert_if_not_present(A).
+
+assert_if_not_present(A) :- wm(A), !.
+assert_if_not_present(A) :- assert(wm(A)).
