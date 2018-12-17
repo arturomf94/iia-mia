@@ -31,11 +31,13 @@ def print_maze(arr):
                 m+=1
 
 def solve_sudoku(arr):
+    prolog.query("reset")
     solver = "problem(1, " + str(arr).replace('0','_') + ")"
     prolog.assertz(solver)
     sudoku_query = prolog.query("problem(1, Rows), sudoku(Rows), maplist(labeling([ff]), Rows).", maxresult=1)
     for soln in sudoku_query:
         sol = soln['Rows']
+    prolog.retract(solver)
     return sol
 
 def createGUI(maze):
