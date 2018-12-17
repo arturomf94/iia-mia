@@ -11,5 +11,3 @@ sudoku(Rows) :-
 blocks([], [], []).
 blocks([N1,N2,N3|Ns1], [N4,N5,N6|Ns2], [N7,N8,N9|Ns3]) :- all_distinct([N1,N2,N3,N4,N5,N6,N7,N8,N9]),
 blocks(Ns1, Ns2, Ns3).
-
-solve_sudoku(Board) :- sudoku(Board), maplist(labeling([ff]), Board).
